@@ -56,6 +56,9 @@ export default function Chat() {
     setIsProcessing(true);
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your secrets.");
+      }
       // 1. Parse with AI
       const parsed = await parseTransactionMessage(userMsg.text);
       
@@ -266,3 +269,4 @@ export default function Chat() {
     </div>
   );
 }
+        
