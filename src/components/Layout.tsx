@@ -22,12 +22,21 @@ export default function Layout() {
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
   useEffect(() => {
+    if (!supabase) {
+      setIsConnected(false);
+      return;
+    }
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_OUT') {
       }
     });
 
     const checkConnection = async () => {
+      if (!supabase) {
+        setIsConnected(false);
+        return;
+      }
       try {
         const { error } = await supabase.from('products').select('id').limit(1);
         if (error && error.message.includes('fetch')) {
