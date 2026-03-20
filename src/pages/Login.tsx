@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Store, AlertCircle, Loader2, Mail, Lock } from "lucide-react";
-import { supabase, handleSupabaseError, OperationType, signInWithEmail, signUpWithEmail } from "../lib/supabase";
+import { supabase, handleSupabaseError, OperationType, signInWithEmail, signUpWithEmail, signInWithGoogle } from "../lib/supabase";
 import { useToast } from "../components/Toast";
 
 export default function Login() {
@@ -58,16 +58,9 @@ export default function Login() {
     setLoading(true);
     setError("");
     try {
-      const { data, error: authError } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin
-        }
-      });
-
-      if (authError) throw authError;
+      await signInWithGoogle();
     } catch (err: any) {
-      setError("Google Sign-In failed. Please try again.");
+      setError(err.message || "Google Sign-In failed. Please try again.");
       console.error(err);
       handleSupabaseError(err, OperationType.WRITE, "auth");
     } finally {
