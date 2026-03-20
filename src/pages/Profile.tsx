@@ -23,6 +23,12 @@ export default function Profile() {
   };
 
   const testConnection = async () => {
+    if (!supabase) {
+      setStatus('error');
+      setErrorMsg("Supabase is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your secrets.");
+      showToast("Connection failed.", "error");
+      return;
+    }
     setChecking(true);
     setStatus('idle');
     setErrorMsg("");
